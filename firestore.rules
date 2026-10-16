@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Chaque équipe a son espace : espaces/{identifiant dérivé du code d'équipe}/...
+    // L'accès exige de connaître le chemin exact ; la liste des espaces n'est pas consultable.
+    match /espaces/{ns}/{col}/{doc} {
+      allow read, write: if ns.size() >= 32
+        && col in ['sites', 'personnes', 'visites', 'remontees', 'meta'];
+    }
+  }
+}
